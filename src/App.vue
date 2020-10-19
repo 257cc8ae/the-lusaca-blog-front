@@ -66,6 +66,7 @@ nav ul li {
   margin-left: 10px;
   margin-right: 10px;
   display: inline;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 nav ul li:hover {
