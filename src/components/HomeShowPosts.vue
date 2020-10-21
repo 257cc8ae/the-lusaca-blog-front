@@ -1,8 +1,19 @@
 <template>
   <div>
-    <h1 v-if="titles != null">
-    {{ titles[0] }}
-    </h1>
+    <div v-if="posts === null">
+      <h2>Now Loading</h2>
+    </div>
+    <div v-else-if="posts === 'Error'">
+      <h2>There was a problem loading.</h2>
+    </div>
+    <div v-else>
+      <div v-for="post in posts" :key="post.title">
+        <div v-if="post.thumbnail != ''">
+          <img v-bind:src="post.thumbnail" loading="lazy" alt="Thumbnail Image" class="thumbnail">
+        </div>
+        <h2 class="post-title">{{ post.title }}</h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -10,13 +21,8 @@
 export default {
   data() {
     return {
-      titles: null,
+      posts: null,
     };
-  },
-  methods: {
-    clear() {
-      this.msg = "";
-    },
   },
   created() {
     fetch("http://localhost:3000")
@@ -24,11 +30,23 @@ export default {
         return response.json();
       })
       .then((json) => {
-        this.titles = json.titles;
+        this.posts = json;
       })
       .catch((err) => {
-        this.msg = err; // エラー処理
+        this.posts = "Error";
+        console.log(err);
       });
   },
 };
 </script>
+
+<style>
+.thumbnail {
+  width: 100%;
+}
+.post-title {
+  font-size: 25px;
+  padding: 20px;
+  margin: 0;
+}
+</style>
